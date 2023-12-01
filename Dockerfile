@@ -1,18 +1,15 @@
-FROM ubuntu
+FROM dde
 
 MAINTAINER blitterated blitterated@protonmail.com
 
+ARG S6_OVERLAY_VERSION=3.1.4.2
+
 WORKDIR /root
-COPY shell/bash_profile .bash_profile
-COPY shell/bashrc .bashrc
-COPY shell/source_files.sh .source_files.sh
 COPY dde.rc/*.* .dde.rc/
 COPY provision/*.* .provision/
 
 RUN ./.provision/apt_prep.sh
-RUN ./.provision/manpages.sh
-RUN ./.provision/apt_install.sh
-RUN ./.provision/s6-overlay.sh
+RUN ./.provision/s6-overlay.sh "${S6_OVERLAY_VERSION}"
 
 COPY utils/container/bounce /usr/bin/bounce
 COPY utils/container/path /usr/bin/path

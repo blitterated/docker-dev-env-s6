@@ -1,4 +1,4 @@
-# Docker Dev Environment
+# Docker Dev Environment with s6-overlay
 
 | [Project Goals](https://github.com/blitterated/docker_dev_env/wiki/Project-Goals) | [Project Questions](https://github.com/blitterated/docker_dev_env/wiki/Project-Questions) |
 | ----- | ----- |
@@ -9,18 +9,34 @@ This concept is not for creating containers ready for production deployment. Ins
 
 This is meant to be a base image for building more focused build time and dev time images. I really don't like using `echo` or `sed` to add lines to `.bashrc`, so I've opted to have `.bashrc` source all files found in the `~/.dde.rc` directory in the image. Just drop any extra shell configuration in a file in that directory, and it will get sourced.
 
+#### Update
+
+This image was previously based directly on the ubuntu image. I've since split this image in two, separating everything [s6-overlay](https://github.com/just-containers/s6-overlay) related into this one, and basing it on the [Docker Dev Environment](https://github.com/blitterated/docker-dev-env) image, which has everything else. I found too many quick-n-dirty use cases for one off applications where I didn't need s6-overlay.
+
 ## Building and Running
 
-### Build the docker-dev-env image from Dockerfile
+### Build the docker-dev-env image
+
+Clone and build this image first: [Docker Dev Environment](https://github.com/blitterated/docker-dev-env)
+
+### Build the docker-dev-env-s6 image from Dockerfile
 
 ```sh
-docker build -t dde .
+docker build -t dde-s6 .
 ```
 
-### Run the docker-dev-env image
+or
+
 
 ```sh
-docker run -it --rm dde /bin/bash
+docker build --progress=plain -t dde-s6 .
+```
+
+
+### Run the docker-dev-env-s6 image
+
+```sh
+docker run -it --rm dde-s6 /bin/bash
 ```
 ## Utility Scripts
 
